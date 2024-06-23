@@ -31,6 +31,7 @@ const IncidentReporter = () => {
 
       const tx = await writeContract({
         abi: CCIPABI,
+        // @ts-ignore
         address: addressData.ccipAddress,
         functionName: 'mintOnSepolia',
         args: [tokenURI,address],
