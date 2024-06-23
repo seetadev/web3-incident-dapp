@@ -8,6 +8,7 @@ import addressData from '../../utils/address.json';
 import CCIPABI from '../../utils/abi.json';
 import Image from 'next/image';
 
+
 const IncidentReporter = () => {
   const { address, isConnected } = useAccount();
 
@@ -32,7 +33,7 @@ const IncidentReporter = () => {
         abi: CCIPABI,
         address: addressData.ccipAddress,
         functionName: 'mintOnSepolia',
-        args: [tokenURI],
+        args: [tokenURI,address],
       });
 
       console.log('Transaction hash:', tx);
