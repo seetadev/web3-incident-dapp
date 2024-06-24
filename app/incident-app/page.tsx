@@ -1,22 +1,31 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 // import ABI from './services/abi.json';
-import axios from 'axios';
-import { useAccount, useWriteContract } from 'wagmi';
-import addressData from '../../utils/address.json';
-import CCIPABI from '../../utils/abi.json';
-import Image from 'next/image';
+import axios from "axios";
+import { useAccount, useWriteContract } from "wagmi";
+import addressData from "../../utils/address.json";
+import CCIPABI from "../../utils/abi.json";
+import Image from "next/image";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const IncidentReporter = () => {
   const { address, isConnected } = useAccount();
 
   // State variables for incident details
-  const [incidentName, setIncidentName] = useState('');
-  const [reporterName, setReporterName] = useState('');
-  const [incidentLevel, setIncidentLevel] = useState('medium');
-  const [description, setDescription] = useState('');
+  const [incidentName, setIncidentName] = useState("");
+  const [reporterName, setReporterName] = useState("");
+  const [incidentLevel, setIncidentLevel] = useState("medium");
+  const [description, setDescription] = useState("");
   const [incidentImageUrl, setIncidentImageUrl] = useState<string | null>(null);
   const [tokenURI, setTokenURI] = useState<string | null>(null);
 
@@ -27,19 +36,19 @@ const IncidentReporter = () => {
 
   const mint = async () => {
     try {
-      if (!isConnected) throw new Error('User disconnected');
+      if (!isConnected) throw new Error("User disconnected");
 
       const tx = await writeContract({
         abi: CCIPABI,
         // @ts-ignore
         address: addressData.ccipAddress,
-        functionName: 'mintOnSepolia',
-        args: [tokenURI,address],
+        functionName: "mintOnSepolia",
+        args: [tokenURI, address],
       });
 
-      console.log('Transaction hash:', tx);
+      console.log("Transaction hash:", tx);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
 
@@ -54,7 +63,7 @@ const IncidentReporter = () => {
 
     if (selectedFile) {
       const ipfsUrl = await handleImageUpload(selectedFile);
-      console.log('Incident Report:', {
+      console.log("Incident Report:", {
         incidentName,
         reporterName,
         incidentLevel,
@@ -95,8 +104,12 @@ const IncidentReporter = () => {
         ],
       };
 
-      const jsonData = new Blob([JSON.stringify(jsonString)], { type: "application/json" });
-      const metadataFile = new File([jsonData], "metadata.json", { type: "application/json" });
+      const jsonData = new Blob([JSON.stringify(jsonString)], {
+        type: "application/json",
+      });
+      const metadataFile = new File([jsonData], "metadata.json", {
+        type: "application/json",
+      });
       const metadataFormData = new FormData();
       metadataFormData.append("file", metadataFile);
 
@@ -124,7 +137,10 @@ const IncidentReporter = () => {
   return (
     <div className="bg-black min-h-screen flex  items-center justify-center">
       <div className="max-w-md w-full mx-auto bg-white rounded-lg shadow-md p-6 sm:p-8 md:p-10">
-        <h1 className="text-2xl font-bold mb-6 text-center"> Medical Incident Reporter</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">
+          {" "}
+          Medical Incident Reporter
+        </h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="incidentName" className="block font-bold mb-2">
@@ -192,14 +208,45 @@ const IncidentReporter = () => {
               accept="image/*"
             />
           </div>
-          {tokenURI ? (
-            <button
-              type="button"
-              onClick={mint}
-              className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300 font-extrabold"
-            >
-              Create Incident NFT
-            </button>
+          {true ? (
+            <div className="flex flex-col gap-4">
+              <Select >
+                <SelectTrigger className="w-full">
+                  <SelectValue className="font-bold" placeholder="Select Your Source Chain" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Source-Chain</SelectLabel>
+                    <SelectItem value="Optimism">
+                      <div className="flex items-center justify-between gap-3">
+                        <Image src="/optimism.png" alt="imge not found" width={20} height={20}></Image>
+                        <span className="">Optimism</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="Arbitrum">
+                    <div className="flex items-center justify-between gap-3">
+                        <Image src="/arbitrum.png" alt="imge not found" width={20} height={20}></Image>
+                        <span className="">Arbitrum</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="Avalanche fuji">
+                    <div className="flex items-center justify-between gap-3">
+                        <Image src="/avalanche.png" alt="imge not found" width={20} height={20}></Image>
+                        <span className="">Avalanche Fuji</span>
+                      </div>
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+
+              <button
+                type="button"
+                onClick={mint}
+                className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300 font-extrabold"
+              >
+                Create Incident NFT
+              </button>
+            </div>
           ) : (
             <button
               type="submit"
