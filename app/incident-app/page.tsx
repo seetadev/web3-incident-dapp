@@ -3,9 +3,11 @@
 import { useState } from "react";
 // import ABI from './services/abi.json';
 import axios from "axios";
-import { useAccount, useWriteContract } from "wagmi";
+import { useAccount, useWriteContract, useSwitchChain } from "wagmi";
 import addressData from "../../utils/address.json";
-import CCIPABI from "../../utils/abi.json";
+import AvalancheAbi from "../../utils/AvalancheAbi.json";
+import OptimismAbi from "../../utils/OptimismAbi.json";
+import ArbitrumAbi from "../../utils/ArbitrumAbi.json";
 import Image from "next/image";
 
 import {
@@ -17,11 +19,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { slice } from "viem";
 
 const IncidentReporter = () => {
-  const { address, isConnected } = useAccount();
-
+  const { address, isConnected, chain } = useAccount();
+  const [selectedValue, setSelectedValue] = useState("");
   // State variables for incident details
+  var ContractAbi: any;
+  var ContractAddress: any;
+  var _function: any;
+  console.log(chain?.name);
+  // Sepolia
+  // Avalanche Fuji
+  // OP Sepolia
+  // Arbitrum Sepolia
+
   const [incidentName, setIncidentName] = useState("");
   const [reporterName, setReporterName] = useState("");
   const [incidentLevel, setIncidentLevel] = useState("medium");
@@ -29,20 +41,49 @@ const IncidentReporter = () => {
   const [incidentImageUrl, setIncidentImageUrl] = useState<string | null>(null);
   const [tokenURI, setTokenURI] = useState<string | null>(null);
 
+  const handleSelectChange = (value: any) => {
+    console.log("Selected value:", value);
+    setSelectedValue(value);
+  };
+
   // State for file upload
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
 
   const { writeContract } = useWriteContract();
+  const { chains, switchChain } = useSwitchChain();
+
+  const _chains = [
+    { name: "OP Sepolia", chainId: 11155420 },
+    { name: "Arbitrum Sepolia", chainId: 421614 },
+    { name: "Avalanche Fuji", chainId: 43113 },
+  ];
+
+  if (selectedValue === "OP Sepolia") {
+    ContractAbi = OptimismAbi;
+    ContractAddress = addressData.ccipOptimismAddress;
+    _function = "mintOnOptimism";
+  }
+  if (selectedValue === "Arbitrum Sepolia") {
+    ContractAbi = ArbitrumAbi;
+    ContractAddress = addressData.ccipArbitrumAddress;
+    _function = "mintOnArbitrum";
+  }
+  if (selectedValue == "Avalanche Fuji") {
+    ContractAbi = AvalancheAbi;
+    ContractAddress = addressData.ccipAvalancheAddress;
+    _function = "mintOnSepolia";
+  }
 
   const mint = async () => {
     try {
       if (!isConnected) throw new Error("User disconnected");
 
       const tx = await writeContract({
-        abi: CCIPABI,
+        abi: ContractAbi,
         // @ts-ignore
-        address: addressData.ccipAddress,
-        functionName: "mintOnSepolia",
+        address: ContractAddress,
+        functionName: _function,
+        // @ts-ignore
         args: [tokenURI, address],
       });
 
@@ -208,36 +249,70 @@ const IncidentReporter = () => {
               accept="image/*"
             />
           </div>
-          {true ? (
+          {tokenURI ? (
             <div className="flex flex-col gap-4">
-              <Select >
+              <Select onValueChange={handleSelectChange}>
                 <SelectTrigger className="w-full">
-                  <SelectValue className="font-bold" placeholder="Select Your Source Chain" />
+                  <SelectValue
+                    className="font-bold"
+                    placeholder="Select Your Source Chain"
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Source-Chain</SelectLabel>
-                    <SelectItem value="Optimism">
+                    <SelectItem value="OP Sepolia">
                       <div className="flex items-center justify-between gap-3">
-                        <Image src="/optimism.png" alt="imge not found" width={20} height={20}></Image>
+                        <Image
+                          src="/optimism.png"
+                          alt="imge not found"
+                          width={20}
+                          height={20}
+                        ></Image>
                         <span className="">Optimism</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="Arbitrum">
-                    <div className="flex items-center justify-between gap-3">
-                        <Image src="/arbitrum.png" alt="imge not found" width={20} height={20}></Image>
+                    <SelectItem value="Arbitrum Sepolia">
+                      <div className="flex items-center justify-between gap-3">
+                        <Image
+                          src="/arbitrum.png"
+                          alt="imge not found"
+                          width={20}
+                          height={20}
+                        ></Image>
                         <span className="">Arbitrum</span>
                       </div>
                     </SelectItem>
-                    <SelectItem value="Avalanche fuji">
-                    <div className="flex items-center justify-between gap-3">
-                        <Image src="/avalanche.png" alt="imge not found" width={20} height={20}></Image>
+                    <SelectItem value="Avalanche Fuji">
+                      <div className="flex items-center justify-between gap-3">
+                        <Image
+                          src="/avalanche.png"
+                          alt="imge not found"
+                          width={20}
+                          height={20}
+                        ></Image>
                         <span className="">Avalanche Fuji</span>
                       </div>
                     </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
+
+              {selectedValue !== chain?.name && (
+                <button
+                  className=" lowercase  bg-blue-500 text-white font-bold py-2 rounded-lg"
+                  onClick={() => {
+                    const selectedChain = _chains.find(
+                      (c) => c.name === selectedValue
+                    );
+                    if (selectedChain) {
+                      switchChain({ chainId: selectedChain.chainId });
+                    }
+                  }}
+                >
+                  switch to {selectedValue}
+                </button>
+              )}
 
               <button
                 type="button"
