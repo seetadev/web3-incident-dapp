@@ -1,5 +1,6 @@
 "use client";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useState } from "react";
 // import ABI from './services/abi.json';
 import axios from "axios";
@@ -100,6 +101,7 @@ const IncidentReporter = () => {
       });
 
       console.log("Transaction hash:", tx);
+      toast("Trasaction Intiated!!");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -180,6 +182,11 @@ const IncidentReporter = () => {
       const metadataHash = `https://gateway.pinata.cloud/ipfs/${resMetadata.data.IpfsHash}`;
       setTokenURI(metadataHash);
       console.log("Metadata IPFS URL:", metadataHash);
+
+      if(metadataHash){
+        toast("Image Uploaded to IPFS");
+      }
+
       return metadataHash;
     } catch (error) {
       alert("Unable to Upload Image and Metadata.");
@@ -355,14 +362,15 @@ const IncidentReporter = () => {
           )}
         </form>
       </div>
+      <ToastContainer />
       <p>check your trasaction Status</p>
-      <div className="flex gap-4 mt-4">
-        <input  placeholder="transaction hash" type="text" value={url} onChange={(e)=>{
+      <div className="flex gap-4 py-8">
+        <input className="p-2 px-4"  placeholder="transaction hash" type="text" value={url} onChange={(e)=>{
           setUrl(e.target.value);
         }}/>
         <button className="text-white bg-blue-500 px-3" onClick={()=>{
           if(url){
-            window.location.href = `https://ccip.chain.link/msg/${url}`
+            window.location.href =`https://ccip.chain.link/msg/${url}`
           }
         }}>Go</button>
       </div>
