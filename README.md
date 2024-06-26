@@ -42,6 +42,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 2. submit Data and then Create incident NFT 
 
+3. put your transaction hash after minting. and then go to check status of trasaction in ccip explorar
+
 ## On Polygon Amoy add Change RPC to this 
 
 https://polygon-amoy.blockpi.network/v1/rpc/public
