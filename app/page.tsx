@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Home() {
   const clickHandler =()=>{
-    window.location.href = "/qr-reader";
+    window.location.href = "/incident-app";
   }
   return (
     <main className="flex w-full h-full min-h-screen flex-col items-center justify-between  ">

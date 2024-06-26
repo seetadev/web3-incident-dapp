@@ -39,9 +39,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Instructions to run the App
 
 1. click on Get Started 
-2. scan the qr code [qr-code-image](https://beige-royal-slug-524.mypinata.cloud/ipfs/QmRtxL7ctunTXQGsQfymJCs3C1xAjrRjuL9H1q81KCExSZ?pinataGatewayToken=e6vJ4oXa8yREy_ZI1ur2ELVB-BnJMRRUabm6gdLEgiyjVHaf_aSz44fyDvFR5r7W)
 
-3. submit Data and then Create incident NFT 
+2. submit Data and then Create incident NFT 
 
 ## On Polygon Amoy add Change RPC to this 
 
