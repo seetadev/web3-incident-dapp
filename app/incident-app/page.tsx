@@ -36,6 +36,8 @@ const IncidentReporter = () => {
   // OP Sepolia
   // Arbitrum Sepolia
 
+  const [url , setUrl] = useState("");
+
   const [incidentName, setIncidentName] = useState("");
   const [reporterName, setReporterName] = useState("");
   const [incidentLevel, setIncidentLevel] = useState("medium");
@@ -186,7 +188,7 @@ const IncidentReporter = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen flex  items-center justify-center">
+    <div className=" flex-col  gap-3 bg-black min-h-screen flex  items-center justify-center">
       <div className="max-w-md w-full mx-auto bg-white rounded-lg shadow-md p-6 sm:p-8 md:p-10">
         <h1 className="text-2xl font-bold mb-6 text-center">
           {" "}
@@ -352,6 +354,17 @@ const IncidentReporter = () => {
             </button>
           )}
         </form>
+      </div>
+      <p>check your trasaction Status</p>
+      <div className="flex gap-4 mt-4">
+        <input  placeholder="transaction hash" type="text" value={url} onChange={(e)=>{
+          setUrl(e.target.value);
+        }}/>
+        <button className="text-white bg-blue-500 px-3" onClick={()=>{
+          if(url){
+            window.location.href = `https://ccip.chain.link/msg/${url}`
+          }
+        }}>Go</button>
       </div>
     </div>
   );
