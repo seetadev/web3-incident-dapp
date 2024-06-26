@@ -8,6 +8,8 @@ import addressData from "../../utils/address.json";
 import AvalancheAbi from "../../utils/AvalancheAbi.json";
 import OptimismAbi from "../../utils/OptimismAbi.json";
 import ArbitrumAbi from "../../utils/ArbitrumAbi.json";
+import PolygonAbi from "../../utils/PolygonAmoy.json";
+
 import Image from "next/image";
 
 import {
@@ -56,6 +58,7 @@ const IncidentReporter = () => {
     { name: "OP Sepolia", chainId: 11155420 },
     { name: "Arbitrum Sepolia", chainId: 421614 },
     { name: "Avalanche Fuji", chainId: 43113 },
+    { name: "Polygon Amoy", chainId: 80002 },
   ];
 
   if (selectedValue === "OP Sepolia") {
@@ -73,6 +76,13 @@ const IncidentReporter = () => {
     ContractAddress = addressData.ccipAvalancheAddress;
     _function = "mintOnSepolia";
   }
+  if (selectedValue == "Polygon Amoy") {
+    ContractAbi = PolygonAbi;
+    ContractAddress = addressData.ccipPolygonAmoyAddress;
+    _function = "mintOnOptimism";
+  }
+
+  // name will changed properly
 
   const mint = async () => {
     try {
@@ -292,6 +302,17 @@ const IncidentReporter = () => {
                           height={20}
                         ></Image>
                         <span className="">Avalanche Fuji</span>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="Polygon Amoy">
+                      <div className="flex items-center justify-between gap-3">
+                        <Image
+                          src="/PolygonAmoy.png"
+                          alt="imge not found"
+                          width={20}
+                          height={20}
+                        ></Image>
+                        <span className="">Polygon Amoy</span>
                       </div>
                     </SelectItem>
                   </SelectGroup>
