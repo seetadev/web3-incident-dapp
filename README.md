@@ -43,5 +43,8 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 3. submit Data and then Create incident NFT 
 
-wallet address: 0x35F41e221f4A65B3e65a731520DD856367Bb89DF
-private key : 61d7943aa6be7ff5e67008d03d217bf14eafa20b552baf88913bac1029bb2ec3
+## On Polygon Amoy add Change RPC to this 
+
+https://polygon-amoy.blockpi.network/v1/rpc/public
+
+
