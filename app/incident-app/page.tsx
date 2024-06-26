@@ -100,8 +100,7 @@ const IncidentReporter = () => {
         args: [tokenURI, address],
       });
 
-      console.log("Transaction hash:", tx);
-      toast("Trasaction Intiated!!");
+      
     } catch (error) {
       console.error("Error:", error);
     }
