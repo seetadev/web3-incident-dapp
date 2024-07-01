@@ -39,9 +39,13 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Instructions to run the App
 
 1. click on Get Started 
-2. scan the qr code [qr-code-image](https://beige-royal-slug-524.mypinata.cloud/ipfs/QmRtxL7ctunTXQGsQfymJCs3C1xAjrRjuL9H1q81KCExSZ?pinataGatewayToken=e6vJ4oXa8yREy_ZI1ur2ELVB-BnJMRRUabm6gdLEgiyjVHaf_aSz44fyDvFR5r7W)
 
-3. submit Data and then Create incident NFT 
+2. submit Data and then Create incident NFT 
 
-wallet address: 0x35F41e221f4A65B3e65a731520DD856367Bb89DF
-private key : 61d7943aa6be7ff5e67008d03d217bf14eafa20b552baf88913bac1029bb2ec3
+3. put your transaction hash after minting. and then go to check status of trasaction in ccip explorar
+
+## On Polygon Amoy add Change RPC to this 
+
+https://polygon-amoy.blockpi.network/v1/rpc/public
+
+

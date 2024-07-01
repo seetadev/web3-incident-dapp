@@ -1,5 +1,6 @@
 "use client";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useState } from "react";
 // import ABI from './services/abi.json';
 import axios from "axios";
@@ -8,6 +9,8 @@ import addressData from "../../utils/address.json";
 import AvalancheAbi from "../../utils/AvalancheAbi.json";
 import OptimismAbi from "../../utils/OptimismAbi.json";
 import ArbitrumAbi from "../../utils/ArbitrumAbi.json";
+import PolygonAbi from "../../utils/PolygonAmoy.json";
+
 import Image from "next/image";
 
 import {
@@ -34,6 +37,8 @@ const IncidentReporter = () => {
   // OP Sepolia
   // Arbitrum Sepolia
 
+  const [url , setUrl] = useState("");
+
   const [incidentName, setIncidentName] = useState("");
   const [reporterName, setReporterName] = useState("");
   const [incidentLevel, setIncidentLevel] = useState("medium");
@@ -56,6 +61,7 @@ const IncidentReporter = () => {
     { name: "OP Sepolia", chainId: 11155420 },
     { name: "Arbitrum Sepolia", chainId: 421614 },
     { name: "Avalanche Fuji", chainId: 43113 },
+    { name: "Polygon Amoy", chainId: 80002 },
   ];
 
   if (selectedValue === "OP Sepolia") {
@@ -73,6 +79,13 @@ const IncidentReporter = () => {
     ContractAddress = addressData.ccipAvalancheAddress;
     _function = "mintOnSepolia";
   }
+  if (selectedValue == "Polygon Amoy") {
+    ContractAbi = PolygonAbi;
+    ContractAddress = addressData.ccipPolygonAmoyAddress;
+    _function = "mintOnOptimism";
+  }
+
+  // name will changed properly
 
   const mint = async () => {
     try {
@@ -87,7 +100,7 @@ const IncidentReporter = () => {
         args: [tokenURI, address],
       });
 
-      console.log("Transaction hash:", tx);
+      
     } catch (error) {
       console.error("Error:", error);
     }
@@ -168,6 +181,11 @@ const IncidentReporter = () => {
       const metadataHash = `https://gateway.pinata.cloud/ipfs/${resMetadata.data.IpfsHash}`;
       setTokenURI(metadataHash);
       console.log("Metadata IPFS URL:", metadataHash);
+
+      if(metadataHash){
+        toast("Image Uploaded to IPFS");
+      }
+
       return metadataHash;
     } catch (error) {
       alert("Unable to Upload Image and Metadata.");
@@ -176,7 +194,7 @@ const IncidentReporter = () => {
   };
 
   return (
-    <div className="bg-black min-h-screen flex  items-center justify-center">
+    <div className=" flex-col  gap-3 bg-black min-h-screen flex  items-center justify-center">
       <div className="max-w-md w-full mx-auto bg-white rounded-lg shadow-md p-6 sm:p-8 md:p-10">
         <h1 className="text-2xl font-bold mb-6 text-center">
           {" "}
@@ -294,6 +312,17 @@ const IncidentReporter = () => {
                         <span className="">Avalanche Fuji</span>
                       </div>
                     </SelectItem>
+                    <SelectItem value="Polygon Amoy">
+                      <div className="flex items-center justify-between gap-3">
+                        <Image
+                          src="/PolygonAmoy.png"
+                          alt="imge not found"
+                          width={20}
+                          height={20}
+                        ></Image>
+                        <span className="">Polygon Amoy</span>
+                      </div>
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -331,6 +360,18 @@ const IncidentReporter = () => {
             </button>
           )}
         </form>
+      </div>
+      <ToastContainer />
+      <p>check your trasaction Status</p>
+      <div className="flex gap-4 py-8">
+        <input className="p-2 px-4"  placeholder="transaction hash" type="text" value={url} onChange={(e)=>{
+          setUrl(e.target.value);
+        }}/>
+        <button className="text-white bg-blue-500 px-3" onClick={()=>{
+          if(url){
+            window.location.href =`https://ccip.chain.link/msg/${url}`
+          }
+        }}>Go</button>
       </div>
     </div>
   );
